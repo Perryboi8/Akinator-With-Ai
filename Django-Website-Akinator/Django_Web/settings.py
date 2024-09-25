@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
+# Where we ad our apps that we create or install
 INSTALLED_APPS = [
     'polls.apps.PollsConfig',
     'django.contrib.admin',
@@ -58,6 +58,7 @@ INTERNAL_IPS = [
     # ...
 ]
 
+#This is where our root url file is gonna be
 ROOT_URLCONF = 'Django_Web.urls'
 
 TEMPLATES = [
@@ -124,6 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+#Defining this is gonna help with importing the images in the html file
 STATIC_URL = '/static/'
 
 # Default primary key field type
