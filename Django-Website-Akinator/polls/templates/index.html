@@ -64,13 +64,17 @@
 
     <div class="prompt">
         <p>Is the sky blue?</p>
-        <div class="button-group">
-            <button class="btn-yes">Yes</button>
-            <button class="btn-no">No</button>
-            <button class="btn-idk">I don't know</button>
+        <form action="/home/question" method="POST">
+            {% csrf_token %}
+            <div class="button-group">
+                <button type="submit" name="answer" value="yes" class="btn-yes">Yes</button>
+                <button type="submit" name="answer" value="no" class="btn-no">No</button>
+                <button type="submit" name="answer" value="idk" class="btn-idk">I don't know</button>
+            </div>
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

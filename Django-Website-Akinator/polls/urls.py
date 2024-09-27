@@ -9,4 +9,5 @@ app_name = "polls"
 urlpatterns = [
     path("home", views.home_page),
     path("question", views.question_page),
+    path("get-answers", views.get_answers)
 ]
