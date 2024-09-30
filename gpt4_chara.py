@@ -4,7 +4,9 @@ from openai import OpenAI
 
 load_dotenv()
 
-KEY = os.getenv("OPENAI_KEY")
+KEY1 = os.getenv("OPENAI_KEY1")
+KEY2 = os.getenv("OPENAI_KEY2")
+KEY = str(KEY1) + str(KEY2)
 
 client = OpenAI(api_key=KEY)
 MODEL = "gpt-4o-mini"
