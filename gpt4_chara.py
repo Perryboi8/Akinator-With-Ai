@@ -28,7 +28,7 @@ print(question)
 answer = input("Your Answer: ")
 
 if answer.lower() == "yes" or answer.lower() == "no":
-    confidence += 10  # Sample confidence increment
+    confidence += 6  # Sample confidence increment, 10 successful input = enough confidence for a guess 
 
 iteration += 1
 log = f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
