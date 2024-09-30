@@ -19,7 +19,7 @@ initial = client.chat.completions.create(
     model=MODEL,
     messages=[
         {"role": "system", "content": "You are trying to guess whatever character the user is thinking of based on user's answer to your (y)es or (n)o questions."},
-        {"role": "user", "content": "Start with your first question."}
+        {"role": "user", "content": "Start with your first yes or no question."}
     ]
 )
 question = initial.choices[0].message.content
@@ -41,7 +41,7 @@ while confidence < 60 and iteration < 10: # Sample confidence threshold
         messages=[
             {"role": "user", "content": log},
             {"role": "system", "content": "You are trying to narrow down the guess of whatever character the user is thinking of based on user's answer to your questions from the log above."},
-            {"role": "user", "content": "Based on the log above with answers to previous questions, proceed with more specific question to narrow down the guess, don't repeat questions that have already been asked."}
+            {"role": "user", "content": "Based on the log above with answers to previous questions, proceed with more specific (y)es or (n)o question to narrow down the guess, don't repeat questions that have already been asked."}
         ]
     )
     question = loop.choices[0].message.content
