@@ -4,10 +4,9 @@ from django.urls import reverse
 
 #Where we create functions to show which template to show based on the http request
 def home_page(request):
-
   return render(request, 'home.html')
 
-def question_page(request):
+def question_view(request):
   if request.method == 'POST':
     answer = request.POST.get('answer')
 

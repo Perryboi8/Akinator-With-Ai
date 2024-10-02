@@ -128,6 +128,11 @@ USE_TZ = True
 #Defining this is gonna help with importing the images in the html file
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

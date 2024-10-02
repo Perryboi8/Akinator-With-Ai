@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -39,11 +39,12 @@
 
 <div class="container">
     <h1>Welcome to Robotic Akinator</h1>
-    <img src="{% static 'polls/images/robot-akinatorimg' %} alt = "Robotic Akinator"}">
+    <img src="{% static 'testimage2.webp' %}" alt = "Robot">
 </div>
 <div class = "container">
-    <button type="button">Start Game</button>
-
+    <a href="{% url 'polls:question_page' %}">
+        <button type="button">Start Game</button>
+    </a>
 </div>
 </body>
 </html>

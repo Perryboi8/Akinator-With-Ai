@@ -7,12 +7,7 @@ app_name = "polls"
 #Notice we pass the functions from views as reference
 #This is a continuation of the home page so it would be like url.home/___
 urlpatterns = [
-    path("home", views.home_page),
-<<<<<<< HEAD
-    path("question", views.question_page, name = 'question_page')
-
-=======
-    path("question", views.question_page),
-    path("get-answers", views.get_answers)
->>>>>>> origin/main
+    path('', views.home_page, name= 'home_page'),
+    path('question', views.question_view, name='question_page'),
+    path("get-answers", views.get_answers, name='get_page')
 ]
