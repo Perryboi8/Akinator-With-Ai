@@ -64,18 +64,17 @@
 
     <div class="prompt">
         <p>Is the sky blue?</p>
-        <!-- Form to capture the button click -->
-        <form method="POST" action="{% url 'question_page' %}">
+        <form action="/home/question" method="POST">
             {% csrf_token %}
             <div class="button-group">
-                <!-- Each button submits a different value -->
-                <button type="submit" name="response" value="yes" class="btn-yes">Yes</button>
-                <button type="submit" name="response" value="no" class="btn-no">No</button>
-                <button type="submit" name="response" value="idk" class="btn-idk">I don't know</button>
+                <button type="submit" name="answer" value="yes" class="btn-yes">Yes</button>
+                <button type="submit" name="answer" value="no" class="btn-no">No</button>
+                <button type="submit" name="answer" value="idk" class="btn-idk">I don't know</button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
 
 </body>
 </html>

@@ -1,21 +1,26 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.urls import reverse
 
+#Where we create functions to show which template to show based on the http request
 def home_page(request):
 
   return render(request, 'home.html')
 
 def question_page(request):
-  if (request.method =="POST"):
-    user_response = request.POST.get('response')
+  if request.method == 'POST':
+    answer = request.POST.get('answer')
 
-    if user_response =='yes':
-      print("The user selected Yes")
-    elif user_response == 'no':
-      print("The user selected No")
-    elif user_response == 'idk':
-      print("the user selected idk")
+    answers = request.session.get('answers', [])
 
-    return redirect('question_page')
+    answers.append(answer)
+    print(len(answers))
+    request.session['answers'] = answers
 
+    return render(request, 'index.html')
   return render(request, 'index.html')
+
+
+def get_answers(request):
+    answers = request.session.get('answers', [])
+    return HttpResponse(f'Answers that are being stored: {answers}')

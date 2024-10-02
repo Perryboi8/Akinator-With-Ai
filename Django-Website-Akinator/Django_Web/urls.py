@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 import debug_toolbar
+#This is where we create the url the include functions checks the url page from that file and continues it
 urlpatterns = [
     path("home/", include("polls.urls")),
     path('admin/', admin.site.urls),
