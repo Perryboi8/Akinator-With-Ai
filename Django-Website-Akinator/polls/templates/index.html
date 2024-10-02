@@ -66,12 +66,17 @@
             margin-top: 20px;
             text-align: left;
         }
+        textarea {
+          resize: none;
+          height: 10px;
+          width: 400px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    
+
     <img src="{% static 'ROBOT.webp' %}" alt ="Question Image" class="prompt-image">
 
     <h2>Answer the following prompt:</h2>
@@ -85,10 +90,10 @@
                 <button type="submit" name="answer" value="no" class="btn-no">No</button>
                 <button type="submit" name="answer" value="idk" class="btn-idk">I don't know</button>
             </div>
-    
+
             <div class="text-box">
-                <label for"additional-info">Additional comments:</label>
-                <textarea id="additional-info" name="additional_info" placeholder="Enter any additional thoughts..."></textarea>
+                <label for"additional-info">Other:</label>
+                <textarea id="additional-info" name="answer" placeholder="Enter a custom answer if the above doesnt work"></textarea>
             </div>
         </form>
     </div>
