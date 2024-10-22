@@ -83,17 +83,17 @@
 
     <div class="prompt">
         <p>Is Your Character Real?</p>
-        <form action="/home/question" method="POST">
+        <form action="/home/question" method="POST" id ="prompt-form">
             {% csrf_token %}
             <div class="button-group">
-                <button type="submit" name="answer" value="yes" class="btn-yes">Yes</button>
-                <button type="submit" name="answer" value="no" class="btn-no">No</button>
-                <button type="submit" name="answer" value="idk" class="btn-idk">I don't know</button>
+                <button type="submit" name="button-answer" value='Yes' class="btn-yes">Yes</button>
+                <button type="submit" name="button-answer" value='No' class="btn-no">No</button>
+                <button type="submit" name="button-answer" value='Idk' class="btn-idk">I don't know</button>
             </div>
 
             <div class="text-box">
                 <label for"additional-info">Other:</label>
-                <textarea id="additional-info" name="answer" placeholder="Enter a custom answer if the above doesnt work"></textarea>
+                <textarea id="additional-info" name="textbox-answer" placeholder="Enter a custom answer if the above doesnt work"></textarea>
             </div>
         </form>
     </div>
@@ -101,4 +101,14 @@
 
 
 </body>
+
+<script>
+    // Submit the form when the "Enter" key is pressed inside the textarea
+    document.getElementById('additional-info').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();  // Prevent default behavior of adding a new line
+            document.getElementById('prompt-form').submit();  // Submit the form when Enter is pressed
+        }
+    });
+</script>
 </html>

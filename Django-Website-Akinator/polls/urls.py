@@ -9,5 +9,6 @@ app_name = "polls"
 urlpatterns = [
     path('', views.home_page, name= 'home_page'),
     path('question', views.question_view, name='question_page'),
-    path("get-answers", views.get_answers, name='get_page')
+    path('get-answers', views.get_answers, name='get_page'),
+    path('clear-answers', views.clear_answers, name='clear_page')
 ]
