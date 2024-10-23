@@ -24,6 +24,10 @@
             text-align: center;
             margin-bottom: auto;
         }
+        .subtext {
+          font-size: 2em;
+          margin-top: 20px;
+        }
         .button-group {
             position: absolute;
             bottom: 100px;
@@ -59,12 +63,25 @@
 
 <div class="container">
     <h1>Is Rapunzel Your Character?</h1>
+    <p class="subtext">It took X questions to achieve this guess.</p>
 </div>
 
 <div class="button-group">
-    <button class="btn-yes">Yes</button>
-    <button class="btn-no">No</button>
+    <button class="btn-yes" onclick="handleYes()">Yes</button>
+    <button class="btn-no" onclick="handleNo()">No</button>
 </div>
 
 </body>
+
+<script>
+    function handleNo() {
+        window.location.href = "{% url 'polls:question_page' %}";
+    }
+
+    function handleYes() {
+        // Implement any functionality if needed for the "Yes" button
+        window.location.href = "{% url 'polls:clear_page' %}";
+    }
+</script>
+
 </html>
