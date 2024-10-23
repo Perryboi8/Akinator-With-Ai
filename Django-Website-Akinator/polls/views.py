@@ -35,3 +35,6 @@ def get_answers(request):
 def clear_answers(request):
    request.session.clear()
    return HttpResponse(f'Answers Are Now Cleared')
+def guess_page(request):
+   #place holder for the guess page to show it you can add code here
+   return render(request, 'guess.html')
