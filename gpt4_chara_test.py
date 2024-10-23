@@ -30,12 +30,13 @@ def Genre():
     print("\n" + question)
     answer = input("Your Answer: ")
     if (answer != 'y') and (answer != 'n'):
-            indefinite += 1
+        indefinite += 1
+        iteration -= 1
     bglog = f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
     print(bglog)
     ############# first question should be real person or not, base on first question, decide which tree to use (genre, or origin?), or, split
 
-    while (confidence < 85) and (iteration < 10) and (indefinite < 15):
+    while (confidence < 85) and (iteration < 10) and (indefinite < 12):
     
         loop = client.chat.completions.create(
             model=MODEL,
@@ -54,6 +55,7 @@ def Genre():
 
         if (answer != 'y') and (answer != 'n'):
             indefinite += 1
+            iteration -= 1
         bglog += f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
         print(bglog)
 
@@ -72,7 +74,7 @@ def Genre():
             print(confidence)
 
 
-    if (confidence >= 85) or (iteration >= 10) or (indefinite >= 15):
+    if (confidence >= 85) or (iteration >= 10) or (indefinite >= 12):
     
         betaGuess = client.chat.completions.create(
             model=MODEL,
@@ -104,7 +106,7 @@ def Guess():
     iteration = 0
     indefinite = 0
 
-    while (confidence < 90) and (iteration < 10) and (indefinite < 15):
+    while (confidence < 90) and (iteration < 10) and (indefinite < 12):
     
         loop = client.chat.completions.create(
             model=MODEL,
@@ -122,6 +124,7 @@ def Guess():
         answer = input("Your Answer: ")
         if (answer != 'y') and (answer != 'n'):
             indefinite += 1
+            iteration -= 1
         bglog += f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
         print(bglog)
 
@@ -140,7 +143,7 @@ def Guess():
             print(confidence)
 
 
-    if (confidence >= 90) or (iteration >= 10) or (indefinite >= 15): 
+    if (confidence >= 90) or (iteration >= 10) or (indefinite >= 12): 
     
         betaGuess = client.chat.completions.create(
             model=MODEL,
