@@ -29,7 +29,7 @@ def Genre():
     iteration += 1
     print("\n" + question)
     answer = input("Your Answer: ")
-    if (answer != 'y') or (answer != 'n'):
+    if (answer != 'y') and (answer != 'n'):
             indefinite += 1
     bglog = f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
     print(bglog)
@@ -52,7 +52,7 @@ def Genre():
         print(question)
         answer = input("Your Answer: ")
 
-        if (answer != 'y') or (answer != 'n'):
+        if (answer != 'y') and (answer != 'n'):
             indefinite += 1
         bglog += f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
         print(bglog)
@@ -120,7 +120,7 @@ def Guess():
         iteration += 1
         print(question)
         answer = input("Your Answer: ")
-        if (answer != 'y') or (answer != 'n'):
+        if (answer != 'y') and (answer != 'n'):
             indefinite += 1
         bglog += f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
         print(bglog)
