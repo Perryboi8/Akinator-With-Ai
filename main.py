@@ -27,8 +27,10 @@ import json
 list = []
 context = []
 confidence = "0"
+curr_question = ""
 def test():
     global confidence
+    global curr_question
     for x in range(10):
         if confidence == "10":
             break
@@ -45,6 +47,7 @@ def test():
         },
         ])
         ai_response = response['message']['content']
+        curr_question = response['message']['content']
         print(ai_response)
         context.append(f"Question {x+1}: {ai_response}")
         input1 = input()
