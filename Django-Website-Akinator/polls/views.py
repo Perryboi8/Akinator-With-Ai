@@ -21,7 +21,7 @@ def question_view(request):
 
     print(answers)
     request.session['answers'] = answers
-
+    #
     return render(request, 'index.html')
 
 
@@ -36,5 +36,9 @@ def clear_answers(request):
    request.session.clear()
    return HttpResponse(f'Answers Are Now Cleared')
 def guess_page(request):
-   #place holder for the guess page to show it you can add code here
+   #place holder for the guess page to show it, You can add code here
+
+
+
+
    return render(request, 'guess.html')
