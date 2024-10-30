@@ -1,17 +1,3 @@
-import os
-from dotenv import load_dotenv
-from openai import OpenAI
-
-load_dotenv()
-
-KEY1 = os.getenv("OPENAI_KEY1")
-KEY2 = os.getenv("OPENAI_KEY2")
-KEY = str(KEY1) + str(KEY2)
-
-client = OpenAI(api_key=KEY)
-MODEL = "gpt-4o-mini"
-
-
 def Genre():
     confidence = 0
     iteration = 0
@@ -28,12 +14,12 @@ def Genre():
 
     iteration += 1
     print("\n" + question)
-    answer = input("Your Answer: ")
-    if (answer != 'y') and (answer != 'n'):
+    answer = input("Your Answer (y/n): ")
+    if (answer.lower() != 'y') and (answer.lower() != 'n'):
         indefinite += 1
         iteration -= 1
     bglog = f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
-    print(bglog)
+    # print(bglog)
     ############# first question should be real person or not, base on first question, decide which tree to use (genre, or origin?), or, split
 
     while (confidence < 85) and (iteration < 10) and (indefinite < 12):
@@ -51,13 +37,13 @@ def Genre():
 
         iteration += 1
         print(question)
-        answer = input("Your Answer: ")
+        answer = input("Your Answer (y/n): ")
 
-        if (answer != 'y') and (answer != 'n'):
+        if (answer.lower() != 'y') and (answer.lower() != 'n'):
             indefinite += 1
             iteration -= 1
         bglog += f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
-        print(bglog)
+        # print(bglog)
 
         if (iteration >= 4): # after certain iteration, starting to confirm genre confidence
     
@@ -71,7 +57,7 @@ def Genre():
                 temperature=0.4,
             )
             confidence = int(genreConfidence.choices[0].message.content)
-            print(confidence)
+            # print(confidence)
 
 
     if (confidence >= 85) or (iteration >= 10) or (indefinite >= 12):
@@ -86,10 +72,10 @@ def Genre():
             temperature=0.5,
         )
         bgGuess = betaGuess.choices[0].message.content
-        print(bgGuess)
+        # print(bgGuess)
 
     
-        genre = str(bglog + "\nGenre description: " + bgGuess + "\n") # local? test output
+        genre = str(bglog + "\nGenre description: " + bgGuess + "\n")
     
         return genre
         
@@ -121,12 +107,12 @@ def Guess():
 
         iteration += 1
         print(question)
-        answer = input("Your Answer: ")
-        if (answer != 'y') and (answer != 'n'):
+        answer = input("Your Answer (y/n): ")
+        if (answer.lower() != 'y') and (answer.lower() != 'n'):
             indefinite += 1
             iteration -= 1
         bglog += f"Question {iteration} : {question}, User answer {iteration} : {answer}; \n"
-        print(bglog)
+        # print(bglog)
 
         if (iteration >= 4): # after certain iteration, starting to confirm chara confidence
     
@@ -137,10 +123,10 @@ def Guess():
                     {"role": "user", "content": bglog},
                     {"role": "user", "content": "Answer only in number from 0 to 100, with 0 being the lowest, how confident are you making an accurate genre guess based on the log?"}
                 ],
-                temperature=0.45,
+                temperature=0.5,
             )
             confidence = int(genreConfidence.choices[0].message.content)
-            print(confidence)
+            # print(confidence)
 
 
     if (confidence >= 90) or (iteration >= 10) or (indefinite >= 12): 
@@ -152,11 +138,16 @@ def Guess():
                 {"role": "user", "content": bglog},
                 {"role": "user", "content": "What character you think of? Don't say anything other than character name."}
             ],
-            temperature=0.6,
+            temperature=0.65,
         )
         bgGuess = betaGuess.choices[0].message.content
-        print("Guess: " + bgGuess)
-    
-        return 0
+        print("Guess: " + bgGuess + "\n")
+
+        print("Is the guess correct?")
+        answer = input("Your Answer (y/n): ")
+        correct = False
+        if answer.lower() == 'y':
+            return True
+        return correct
     
 Guess()
