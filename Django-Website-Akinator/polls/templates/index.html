@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,12 +14,12 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f4;
+            background-color: #e69900;
         }
         .container {
             width: 80%;
             max-width: 600px;
-            background-color: white;
+            background-color: #ffcc66;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -27,11 +28,11 @@
         .button-group {
             display: flex;
             justify-content: space-around;
-            margin-top: 10px;
+            margin-top: 20px;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 15px 30px;
+            font-size: 18px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
@@ -55,26 +56,59 @@
         button:hover {
             opacity: 0.9;
         }
+        .prompt-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .text-box {
+            margin-top: 20px;
+            text-align: left;
+        }
+        textarea {
+          resize: none;
+          height: 10px;
+          width: 400px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
+
+    <img src="{% static 'ROBOT.webp' %}" alt ="Question Image" class="prompt-image">
+
     <h2>Answer the following prompt:</h2>
 
     <div class="prompt">
-        <p>Is the sky blue?</p>
-        <form action="/home/question" method="POST">
+        <p>Is Your Character Real?</p>
+        <form action="/home/question" method="POST" id ="prompt-form">
             {% csrf_token %}
             <div class="button-group">
-                <button type="submit" name="answer" value="yes" class="btn-yes">Yes</button>
-                <button type="submit" name="answer" value="no" class="btn-no">No</button>
-                <button type="submit" name="answer" value="idk" class="btn-idk">I don't know</button>
+                <button type="submit" name="button-answer" value='Yes' class="btn-yes">Yes</button>
+                <button type="submit" name="button-answer" value='No' class="btn-no">No</button>
+                <button type="submit" name="button-answer" value='Idk' class="btn-idk">I don't know</button>
             </div>
-        </div>
+
+            <div class="text-box">
+                <label for"additional-info">Other:</label>
+                <textarea id="additional-info" name="textbox-answer" placeholder="Enter a custom answer if the above doesnt work"></textarea>
+            </div>
+        </form>
     </div>
 </div>
 
 
 </body>
+
+<script>
+    // Submit the form when the "Enter" key is pressed inside the textarea
+    document.getElementById('additional-info').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();  // Prevent default behavior of adding a new line
+            document.getElementById('prompt-form').submit();  // Submit the form when Enter is pressed
+        }
+    });
+</script>
 </html>
