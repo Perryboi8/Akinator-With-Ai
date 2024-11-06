@@ -92,7 +92,12 @@
     <h2>Answer the following prompt:</h2>
 
     <div class="prompt">
-        <p>Is Your Character Real?</p>
+        {% if ai_response %}
+            <h3>AI Question:</h3>
+            <p>{{ ai_response }}</p>
+        {% else %}
+            <p>Is Your Character Real?</p>
+        {% endif %}
         <form action="/home/question" method="POST" id ="prompt-form">
             {% csrf_token %}
             <div class="button-group">

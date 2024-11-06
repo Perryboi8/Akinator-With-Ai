@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
+from .gpt4_chara import Genre, get_initial_question, get_next_question
 
 #Where we create functions to show which template to show based on the http request
 def home_page(request):
@@ -13,6 +14,8 @@ def question_view(request):
     textbox_answer = request.POST.get('textbox-answer') #Grabs Textbox answer from html
 
     answers = request.session.get('answers', [])
+    previous_questions = request.session.get('previous_questions', [])
+
 
     if textbox_answer and textbox_answer.strip():
        answers.append(textbox_answer.strip())
@@ -21,8 +24,19 @@ def question_view(request):
 
     print(answers)
     request.session['answers'] = answers
-    #
-    return render(request, 'index.html')
+    
+    log = "\n".join(answers)
+    
+    while True:
+      question = get_next_question(log)
+      
+      if question not in previous_questions:
+         previous_questions.append(question)
+         break
+
+    request.session['previous_questions'] = previous_questions
+   
+    return render(request, 'index.html', {'ai_response': question, 'answers': answers})
 
 
   return render(request, 'index.html')
