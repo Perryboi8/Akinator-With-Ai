@@ -37,7 +37,7 @@ def Genre():
     ############# first question should be real person or not, base on first question, decide which tree to use (genre, or origin?), or, split
 
     while (confidence < 85) and (iteration < 10) and (indefinite < 12):
-    
+
         loop = client.chat.completions.create(
             model=MODEL,
             messages=[
@@ -60,7 +60,7 @@ def Genre():
         # print(bglog)
 
         if (iteration >= 4): # after certain iteration, starting to confirm genre confidence
-    
+
             genreConfidence = client.chat.completions.create(
                 model=MODEL,
                 messages=[
@@ -75,7 +75,7 @@ def Genre():
 
 
     if (confidence >= 85) or (iteration >= 10) or (indefinite >= 12):
-    
+
         betaGuess = client.chat.completions.create(
             model=MODEL,
             messages=[
@@ -88,11 +88,11 @@ def Genre():
         bgGuess = betaGuess.choices[0].message.content
         # print(bgGuess)
 
-    
+
         genre = str(bglog + "\nGenre description: " + bgGuess + "\n")
-    
+
         return genre
-        
+
 
 
 def get_initial_question():
@@ -103,8 +103,8 @@ def get_initial_question():
             {"role": "user", "content": "Start with your first question."}
         ],
         temperature=0.7,
-        frequency_penalty=0.5,  #Makes it less likely for questions to repeat
-        presence_penalty=0.6,   #Added to encourage asking new prompts/questions
+        frequency_penalty=0.8,  #Makes it less likely for questions to repeat
+        presence_penalty=0.7,   #Added to encourage asking new prompts/questions
     )
     return response['choices'][0]['message']['content']
 
@@ -113,9 +113,9 @@ def get_next_question(log):
     response = openai.ChatCompletion.create(
         model=MODEL,
         messages=[
-            {"role": "system", "content": "You are trying to narrow down the guess of whatever character the user is thinking of based on the user's answers. The log contains previous questions and answers. DO NOT repeat any questions that have already been asked or similar types of questions."},
+            {"role": "system", "content": "You are trying to narrow down the guess of whatever character the user is thinking of based on the user's answers. The log contains previous questions and answers. DO NOT repeat any questions that have already been asked which is "},
             {"role": "user", "content": log},
-            {"role": "user", "content": "Based on the log above with answers to previous questions, proceed with more specific question to narrow down the guess, don't repeat questions that have already been asked, don't say anything other than the question itself, don't ask if it's a specific named character."}
+            {"role": "user", "content": "Based on the log above with answers to previous questions, proceed with more specific question to narrow down the guess, don't repeat questions that have already been asked, don't say anything other than the question itself, don't ask if it's a specific named character, and dont ask questions that can have more then one answer."}
         ],
         temperature=0.7,
         presence_penalty=0.8,

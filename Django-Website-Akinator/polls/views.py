@@ -24,18 +24,19 @@ def question_view(request):
 
     print(answers)
     request.session['answers'] = answers
-    
+
     log = "\n".join(answers)
-    
+
+
     while True:
       question = get_next_question(log)
-      
+
       if question not in previous_questions:
          previous_questions.append(question)
          break
 
     request.session['previous_questions'] = previous_questions
-   
+
     return render(request, 'index.html', {'ai_response': question, 'answers': answers})
 
 
