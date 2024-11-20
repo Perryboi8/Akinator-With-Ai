@@ -83,7 +83,7 @@
     </style>
 </head>
 <body>
-  <a href="{% url 'polls:question_page_llama' %}">
+  <a href="{% url 'polls:question_page_gpt' %}">
    <button type='button' name="button-Ai" class="btn-Ai" >Change AI Model</button>
   </a>
 <div class="container">
@@ -94,12 +94,12 @@
 
     <div class="prompt">
         {% if ai_response %}
-            <h3>Chat Gpt Question:</h3>
+            <h3>Llamma Question:</h3>
             <p>{{ ai_response }}</p>
         {% else %}
             <p>Is Your Character Real?</p>
         {% endif %}
-        <form action="/home/question-gpt" method="POST" id ="prompt-form">
+        <form action="/home/question-llama" method="POST" id ="prompt-form">
             {% csrf_token %}
             <div class="button-group">
                 <button type="submit" name="button-answer" value='Yes' class="btn-yes">Yes</button>
