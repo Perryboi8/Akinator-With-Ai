@@ -52,16 +52,14 @@ def get_answers(request):
     return HttpResponse(f'Answers that are being stored: {answers}')
 
 def clear_answers(request):
-   request.session.clear()
-   return HttpResponse(f'Answers Are Now Cleared')
+    request.session.clear()
+    #redirects you to the 'next' page and to home page if next isnt there allows the url to be consistent across both
+    next_page = request.GET.get('next', reverse('polls:home_page'))
+    return redirect(next_page)
 
 
 def guess_page(request):
    #place holder for the guess page to show it, You can add code here
-
-
-
-
    return render(request, 'guess.html')
 
 def question_view_llama(request):

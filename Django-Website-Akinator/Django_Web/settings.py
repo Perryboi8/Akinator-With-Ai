@@ -165,6 +165,7 @@ LOGGING = {
             'formatter': 'verbose',
         },
     },
+    # This is for getting the log for the django server lots of text so its commented 
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
