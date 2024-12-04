@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def generate_next_question(context, model="llama3.2"):
+def generate_next_question(context, model="llama3.2:1b"):
     """
     Generate the next question using the AI model.
     Build history from the context list and ask relevant questions.
@@ -16,10 +16,10 @@ def generate_next_question(context, model="llama3.2"):
                 {
                     'role': 'user',
                     'content': """reply without any extraneous action. ask a yes or no question to try to get clues as to what person I am thinking of.
-                                only ask the question. only one sentence. try to ask questions that help narrow down the answer based off the list. 
+                                only ask the question. only one sentence. try to ask questions that help narrow down the answer based off the list.
                                 the list will be in the format: question followed by the answer to that question. the person can be famous, or they can be not that famous.
                                 the answers to the question might not be exactly true, keep a slight variance in mind. if there are no questions about if the person is real life person or not, ask that first.
-                                only ask relevant questions. do not ask similar questions to what is already on the list: 
+                                only ask relevant questions. do not ask similar questions to what is already on the list:
                                 """ + history_prompt
                 }
             ],
@@ -31,7 +31,7 @@ def generate_next_question(context, model="llama3.2"):
         logger.error(f"Error generating question: {e}")
         return "An error occurred while generating the question."
 
-def make_guess(context, model="llama3.2"):
+def make_guess(context, model="llama3.2:1b"):
     """
     Make a final guess using the AI model.
     """
@@ -54,7 +54,7 @@ def make_guess(context, model="llama3.2"):
         logger.error(f"Error making a guess: {e}")
         return "An error occurred while making the guess."
 
-def evaluate_confidence(context, model="llama3.2"):
+def evaluate_confidence(context, model="llama3.2:1b"):
     """
     Get confidence level for the AI's guess.
     """

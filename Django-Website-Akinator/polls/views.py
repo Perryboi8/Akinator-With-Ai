@@ -86,9 +86,9 @@ def question_view_llama(request):
         request.session['iteration'] = iteration + 1
 
         # Check if confidence is sufficient for a guess
-        if confidence == "10" or iteration >= 10:
+        if confidence == "10" or iteration >= 15:
             guess = make_guess(context)
-            return render(request, 'guess.html', {'guess': guess, 'confidence': confidence})
+            return render(request, 'guess.html', {'final_guess': guess, 'confidence': confidence})
 
         # Continue with the next question
         return render(request, 'index2.html', {'ai_response': question, 'context': context, 'confidence': confidence})
@@ -99,5 +99,3 @@ def question_view_llama(request):
     request.session['iteration'] = 0
     first_question = "Is your character real?"
     return render(request, 'index2.html', {'ai_response': first_question})
-
-
