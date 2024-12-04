@@ -85,7 +85,7 @@
 <body>
     <a href="#" onclick="switchAI('gpt')">
         <button type="button" name="button-Ai" class="btn-Ai">Switch to GPT-4</button>
-    </a>     
+    </a>
 <div class="container">
 
     <img src="{% static 'ROBOT.webp' %}" alt ="Question Image" class="prompt-image">
@@ -113,7 +113,7 @@
             </div>
         </form>
     </div>
-    
+
 </div>
 
 
@@ -131,8 +131,8 @@
     function switchAI(aiType) {
         if (confirm("Switching AI will end the current game session. Do you want to proceed?")) {
             // Redirect to the appropriate AI route and clear session data
-            window.location.href = aiType === 'llama' 
-                ? "{% url 'polls:clear_page' %}?next={% url 'polls:question_page_llama' %}" 
+            window.location.href = aiType === 'llama'
+                ? "{% url 'polls:clear_page' %}?next={% url 'polls:question_page_llama' %}"
                 : "{% url 'polls:clear_page' %}?next={% url 'polls:question_page_gpt' %}";
         }
     }
