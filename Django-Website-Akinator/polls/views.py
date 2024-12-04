@@ -67,13 +67,21 @@ def question_view_llama(request):
         # Retrieve or initialize session variables
         context = request.session.get('context', [])
         confidence = request.session.get('confidence', "0")
-        iteration = request.session.get('iteration', 0)
+        iteration = request.session.get('iteration', 1)
 
         # User's response
-        user_answer = request.POST.get('user-answer', 'No Answer').strip()
+
+        textbox_answer = request.POST.get('textbox-answer').strip()
+        if textbox_answer:
+          user_answer = request.POST.get('textbox-answer').strip()
+        else:
+          user_answer = request.POST.get('button-answer').strip()
         context.append(f"Answer {iteration + 1}: {user_answer}")
 
         # Generate the next question
+        if not context:
+           question = "Is your character real?"
+           context.append(f"Question 1: : {question}")
         question = generate_next_question(context)
         context.append(f"Question {iteration + 1}: {question}")
 
@@ -82,6 +90,7 @@ def question_view_llama(request):
         request.session['context'] = context
         request.session['confidence'] = confidence
         request.session['iteration'] = iteration + 1
+        print(context)
 
         # Check if confidence is sufficient for a guess
         if confidence == "10" or iteration >= 10:
