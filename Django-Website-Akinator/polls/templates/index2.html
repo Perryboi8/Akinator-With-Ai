@@ -83,9 +83,9 @@
     </style>
 </head>
 <body>
-  <a href="{% url 'polls:question_page_gpt' %}">
-   <button type='button' name="button-Ai" class="btn-Ai" >Switch to GPT-4</button>
-  </a>
+    <a href="#" onclick="switchAI('gpt')">
+        <button type="button" name="button-Ai" class="btn-Ai">Switch to GPT-4</button>
+    </a>
 <div class="container">
 
     <img src="{% static 'ROBOT.webp' %}" alt ="Question Image" class="prompt-image">
@@ -94,7 +94,7 @@
 
     <div class="prompt">
         {% if ai_response %}
-            <h3>Llamma Question:</h3>
+            <h3>Llama Question:</h3>
             <p>{{ ai_response }}</p>
         {% else %}
             <p>Is Your Character Real?</p>
@@ -113,6 +113,7 @@
             </div>
         </form>
     </div>
+
 </div>
 
 
@@ -126,5 +127,14 @@
             document.getElementById('prompt-form').submit();  // Submit the form when Enter is pressed
         }
     });
+    // Popup notification when pressing the switch ai button this is the one for llama hence ai type llama
+    function switchAI(aiType) {
+        if (confirm("Switching AI will end the current game session. Do you want to proceed?")) {
+            // Redirect to the appropriate AI route and clear session data
+            window.location.href = aiType === 'llama'
+                ? "{% url 'polls:clear_page' %}?next={% url 'polls:question_page_llama' %}"
+                : "{% url 'polls:clear_page' %}?next={% url 'polls:question_page_gpt' %}";
+        }
+    }
 </script>
 </html>
