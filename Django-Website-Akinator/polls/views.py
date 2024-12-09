@@ -69,19 +69,20 @@ def question_view_llama(request):
         confidence = request.session.get('confidence', "0")
         iteration = request.session.get('iteration', 1)
 
-        # User's response
+        # Ensure the first question is stored
+        if not context:
+           question = "Is your character real?"
+           context.append(f"Question 1: : {question}")
 
+        # User's response
         textbox_answer = request.POST.get('textbox-answer').strip()
         if textbox_answer:
           user_answer = request.POST.get('textbox-answer').strip()
         else:
           user_answer = request.POST.get('button-answer').strip()
-        context.append(f"Answer {iteration + 1}: {user_answer}")
+        context.append(f"Answer {iteration}: {user_answer}")
 
         # Generate the next question
-        if not context:
-           question = "Is your character real?"
-           context.append(f"Question 1: : {question}")
         question = generate_next_question(context)
         context.append(f"Question {iteration + 1}: {question}")
 
@@ -103,6 +104,6 @@ def question_view_llama(request):
     # Handle GET (start of the game)
     request.session['context'] = []
     request.session['confidence'] = "0"
-    request.session['iteration'] = 0
+    request.session['iteration'] = 1
     first_question = "Is your character real?"
     return render(request, 'index2.html', {'ai_response': first_question})

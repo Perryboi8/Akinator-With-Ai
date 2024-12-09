@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def generate_next_question(context, model="llama3.2:1b"):
+def generate_next_question(context, model="llama3.2"):
     """
     Generate the next question using the AI model.
     Build history from the context list and ask relevant questions.
@@ -15,11 +15,19 @@ def generate_next_question(context, model="llama3.2:1b"):
             messages=[
                 {
                     'role': 'user',
-                    'content': """reply without any extraneous action. ask a yes or no question to try to get clues as to what person I am thinking of.
-                                only ask the question. only one sentence. try to ask questions that help narrow down the answer based off the list.
-                                the list will be in the format: question followed by the answer to that question. the person can be famous, or they can be not that famous.
-                                the answers to the question might not be exactly true, keep a slight variance in mind. if there are no questions about if the person is real life person or not, ask that first.
-                                only ask relevant questions. do not ask similar questions to what is already on the list:
+                    'content': """You are playing a game where you must guess a character I am thinking of. The character could be real or fictional, famous or obscure.
+
+                                    Your task is to ask a yes or no question that helps you narrow down the possibilities. Only ask one question at a time, and the question must be highly relevant based off a history list.
+                                    Rules:
+
+                                    1. Begin with broad, general questions to narrow the category (e.g., "Is the character real?" or "Is the character male?").
+                                    2. As you gather information, gradually transition to more specific questions that will help you narrow down the character.
+                                    3. Avoid overly specific questions (e.g., "Is your character from Star Wars?") unless prior answers strongly suggest that level of detail.
+                                    4. Do not repeat or rephrase any previous questions from the history. Ensure your question is unique and distinct.
+                                    5. Ask questions that are strategic and logical, aimed at eliminating the largest number of possibilities.
+                                    6. Your response should be a single sentence containing only the question.
+                                    7. If they're not real, then they must be from a work of fiction.
+                                    Based on this history, what is your next yes or no question? History of Questions and Answers:
                                 """ + history_prompt
                 }
             ],
@@ -31,7 +39,7 @@ def generate_next_question(context, model="llama3.2:1b"):
         logger.error(f"Error generating question: {e}")
         return "An error occurred while generating the question."
 
-def make_guess(context, model="llama3.2:1b"):
+def make_guess(context, model="llama3.2"):
     """
     Make a final guess using the AI model.
     """
@@ -42,8 +50,14 @@ def make_guess(context, model="llama3.2:1b"):
             messages=[
                 {
                     'role': 'user',
-                    'content': 'reply without any extraneous action. only say the person you are thinking of. do not say anything other than that. guess who I am thinking of based off clues I gave you. the format of the clue will be "question" followed by "answer to the question". '
-                               'If the character is from a movie, do not say their actor name but the character they play. My person is ' + history_prompt
+                    'content': """Based on the conversation history, your task is to guess the character I am thinking of. The character could be real or fictional, famous or obscure.
+
+                                    Rules:
+
+                                    1. Make one confident guess about the character based solely on the information provided in the history.
+                                    2. Your response should only include the name of the character and nothing else. Avoid any additional context, reasoning, or commentary.
+                                    3. If the history doesn't provide enough information for a confident guess, make your best attempt while accounting for slight ambiguities in the answers.
+                                    What is your guess? Here is the conversation history: """ + history_prompt
                 },
             ],
         )
@@ -54,7 +68,7 @@ def make_guess(context, model="llama3.2:1b"):
         logger.error(f"Error making a guess: {e}")
         return "An error occurred while making the guess."
 
-def evaluate_confidence(context, model="llama3.2:1b"):
+def evaluate_confidence(context, model="llama3.2"):
     """
     Get confidence level for the AI's guess.
     """
