@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from .gpt4_chara import Genre, get_initial_question, get_next_question
 import logging
-from .llama_service import generate_next_question, make_guess, evaluate_confidence
+from .llama_service import generate_next_question, make_guess, evaluate_confidence, generate_image
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,16 @@ def clear_answers(request):
 
 def guess_page(request):
    #place holder for the guess page to show it, You can add code here
-   return render(request, 'guess.html')
+   context = request.session.get('context', [])
+
+   guess = make_guess(context)
+
+   prompt = f"A image of the character {guess}, digital art"
+   image_url = generate_image(prompt)
+   
+   print("Image URL:", image_url)
+
+   return render(request, 'guess.html', {'final_guess': guess, 'image_url': image_url})
 
 def question_view_llama(request):
     if request.method == 'POST':
@@ -94,8 +103,7 @@ def question_view_llama(request):
 
         # Check if confidence is sufficient for a guess
         if confidence == "10" or iteration >= 15:
-            guess = make_guess(context)
-            return render(request, 'guess.html', {'final_guess': guess, 'confidence': confidence})
+            return redirect('polls:guessPage')
 
         # Continue with the next question
         return render(request, 'index2.html', {'ai_response': question, 'context': context, 'confidence': confidence})

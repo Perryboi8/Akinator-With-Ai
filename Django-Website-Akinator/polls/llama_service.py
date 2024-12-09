@@ -1,9 +1,13 @@
 import ollama
 import logging
+import openai
+import os
 
 logger = logging.getLogger(__name__)
 
-def generate_next_question(context, model="llama3.2:1b"):
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def generate_next_question(context, model="llama3.2"):
     """
     Generate the next question using the AI model.
     Build history from the context list and ask relevant questions.
@@ -31,7 +35,7 @@ def generate_next_question(context, model="llama3.2:1b"):
         logger.error(f"Error generating question: {e}")
         return "An error occurred while generating the question."
 
-def make_guess(context, model="llama3.2:1b"):
+def make_guess(context, model="llama3.2"):
     """
     Make a final guess using the AI model.
     """
@@ -54,7 +58,7 @@ def make_guess(context, model="llama3.2:1b"):
         logger.error(f"Error making a guess: {e}")
         return "An error occurred while making the guess."
 
-def evaluate_confidence(context, model="llama3.2:1b"):
+def evaluate_confidence(context, model="llama3.2"):
     """
     Get confidence level for the AI's guess.
     """
@@ -75,3 +79,24 @@ def evaluate_confidence(context, model="llama3.2:1b"):
     except Exception as e:
         logger.error(f"Error evaluating confidence: {e}")
         return "0"
+    
+
+def generate_image(prompt):
+    """
+    Generate an image using OpenAI's DALL-E based on a prompt.
+    """
+    try:
+        print("Attempting to generate an image with the prompt:", prompt)
+        response = openai.Image.create(
+            prompt=prompt,
+            n=1,  # Number of images to generate
+            size="512x512"  # Image resolution
+        )
+        print("openai.Image.create response:", response)
+        image_url = response["data"][0]["url"]
+        print("Image URL:", image_url)
+        return image_url
+    except Exception as e:
+        print("Error generating image:", e)
+        logger.error(f"Error generating image: {e}")
+        return None

@@ -166,16 +166,16 @@ LOGGING = {
         },
     },
     # This is for getting the log for the django server lots of text so its commented
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        '__main__': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
+    # 'loggers': {
+    #     'django': {
+    #         'handlers': ['console', 'file'],
+    #         'level': 'DEBUG',
+    #         'propagate': True,
+    #     },
+    #     '__main__': {
+    #         'handlers': ['console', 'file'],
+    #         'level': 'DEBUG',
+    #         'propagate': True,
+    #     },
+    # },
 }
