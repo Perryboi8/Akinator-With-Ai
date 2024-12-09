@@ -1,7 +1,11 @@
 import ollama
 import logging
+import openai
+import os
 
 logger = logging.getLogger(__name__)
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def generate_next_question(context, model="llama3.2"):
     """
@@ -89,3 +93,24 @@ def evaluate_confidence(context, model="llama3.2"):
     except Exception as e:
         logger.error(f"Error evaluating confidence: {e}")
         return "0"
+    
+
+def generate_image(prompt):
+    """
+    Generate an image using OpenAI's DALL-E based on a prompt.
+    """
+    try:
+        print("Attempting to generate an image with the prompt:", prompt)
+        response = openai.Image.create(
+            prompt=prompt,
+            n=1,  # Number of images to generate
+            size="512x512"  # Image resolution
+        )
+        print("openai.Image.create response:", response)
+        image_url = response["data"][0]["url"]
+        print("Image URL:", image_url)
+        return image_url
+    except Exception as e:
+        print("Error generating image:", e)
+        logger.error(f"Error generating image: {e}")
+        return None

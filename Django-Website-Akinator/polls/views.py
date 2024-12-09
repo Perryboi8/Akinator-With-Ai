@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from .gpt4_chara import Genre, get_initial_question, get_next_question
+from .gpt4_chara import get_next_question, make_final_guess, evaluate_genre_confidence, identify_genre
 import logging
-from .llama_service import generate_next_question, make_guess, evaluate_confidence
+from .llama_service import generate_next_question, make_guess, evaluate_confidence, generate_image
 
 logger = logging.getLogger(__name__)
 
@@ -12,39 +12,74 @@ def home_page(request):
   return render(request, 'home.html')
 
 def question_view_gpt(request):
-  if request.method == 'POST':
+    if request.method == 'POST':
+        button_answer = request.POST.get('button-answer')
+        textbox_answer = request.POST.get('textbox-answer')
+        answers = request.session.get('answers', [])
+        previous_questions = request.session.get('previous_questions', [])
+        iteration = request.session.get('iteration', 0)
+        genre_confidence = request.session.get('genre_confidence', 0)
+        genre_identified = request.session.get('genre_identified', False)
+        log = request.session.get('log', "")
 
-    button_answer = request.POST.get('button-answer') #Grabs the button answer from index.html
-    textbox_answer = request.POST.get('textbox-answer') #Grabs Textbox answer from html
+        if textbox_answer and textbox_answer.strip():
+            answers.append(textbox_answer.strip())
+        elif button_answer:
+            answers.append(button_answer)
 
-    answers = request.session.get('answers', [])
-    previous_questions = request.session.get('previous_questions', [])
+        iteration += 1
+        log += f"Question {iteration}: {previous_questions[-1] if previous_questions else 'N/A'}, Answer: {answers[-1]}\n"
+        request.session['iteration'] = iteration
+        request.session['log'] = log
+        request.session['answers'] = answers
 
+        if not genre_identified and iteration >= 4:
+            genre_confidence = evaluate_genre_confidence(log)
+            if genre_confidence >= 85 or iteration >= 10:
+                genre_description = identify_genre(log)
+                log += f"\nGenre Identified: {genre_description}\n"
+                request.session['log'] = log
+                request.session['genre_identified'] = True
+                request.session['iteration'] = 0
+                answers = []
+                previous_questions = []
 
-    if textbox_answer and textbox_answer.strip():
-       answers.append(textbox_answer.strip())
-    elif button_answer:
-       answers.append(button_answer)
+        if genre_identified and iteration >= 4:
+            final_guess = make_final_guess(log)
+            return render(request, 'guess.html', {
+                'final_guess': final_guess,
+                'answers': answers,
+                'iteration': iteration,
+            })
 
-    print(answers)
-    request.session['answers'] = answers
+        log = "\n".join(answers)
+        question = None
+        retry_limit = 10
+        for _ in range(retry_limit):
+            question = get_next_question(log, previous_questions)
+            if question:
+                previous_questions.append(question)
+                break
 
-    log = "\n".join(answers)
+        if not question:
+            question = "I couldn't generate a new question. Try again later."
 
+        request.session['previous_questions'] = previous_questions
 
-    while True:
-      question = get_next_question(log)
+        return render(request, 'index.html', {
+            'ai_response': question,
+            'answers': answers,
+            'iteration': iteration,
+        })
 
-      if question not in previous_questions:
-         previous_questions.append(question)
-         break
-
-      request.session['previous_questions'] = previous_questions
-
-    return render(request, 'index.html', {'ai_response': question, 'answers': answers})
-
-
-  return render(request, 'index.html')
+    # initializing
+    request.session['iteration'] = 0
+    request.session['answers'] = []
+    request.session['previous_questions'] = []
+    request.session['genre_confidence'] = 0
+    request.session['genre_identified'] = False
+    request.session['log'] = ""
+    return render(request, 'index.html')
 
 
 def get_answers(request):
@@ -60,7 +95,17 @@ def clear_answers(request):
 
 def guess_page(request):
    #place holder for the guess page to show it, You can add code here
-   return render(request, 'guess.html')
+   context = request.session.get('context', [])
+
+   guess = make_guess(context)
+
+   prompt = f"A image of the character {guess}, digital art"
+   image_url = generate_image(prompt)
+   
+   print("Image URL:", image_url)
+   iteration = request.session.get('iteration', 0)
+
+   return render(request, 'guess.html', {'final_guess': guess, 'image_url': image_url, 'iteration': iteration})
 
 def question_view_llama(request):
     if request.method == 'POST':
@@ -95,8 +140,8 @@ def question_view_llama(request):
 
         # Check if confidence is sufficient for a guess
         if confidence == "10" or iteration >= 15:
-            guess = make_guess(context)
-            return render(request, 'guess.html', {'final_guess': guess, 'confidence': confidence})
+            request.session['iteration'] = iteration
+            return redirect('polls:guessPage')
 
         # Continue with the next question
         return render(request, 'index2.html', {'ai_response': question, 'context': context, 'confidence': confidence})
