@@ -103,8 +103,9 @@ def guess_page(request):
    image_url = generate_image(prompt)
    
    print("Image URL:", image_url)
+   iteration = request.session.get('iteration', 0)
 
-   return render(request, 'guess.html', {'final_guess': guess, 'image_url': image_url})
+   return render(request, 'guess.html', {'final_guess': guess, 'image_url': image_url, 'iteration': iteration})
 
 def question_view_llama(request):
     if request.method == 'POST':
@@ -138,6 +139,7 @@ def question_view_llama(request):
 
         # Check if confidence is sufficient for a guess
         if confidence == "10" or iteration >= 15:
+            request.session['iteration'] = iteration
             return redirect('polls:guessPage')
 
         # Continue with the next question
