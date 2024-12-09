@@ -46,11 +46,9 @@ def question_view_gpt(request):
 
         if genre_identified and iteration >= 4:
             final_guess = make_final_guess(log)
-            return render(request, 'guess.html', {
-                'final_guess': final_guess,
-                'answers': answers,
-                'iteration': iteration,
-            })
+            request.session['iteration'] = iteration
+            request.session['final_guess'] = final_guess
+            return redirect('polls:guessPage')
 
         log = "\n".join(answers)
         question = None
@@ -101,7 +99,7 @@ def guess_page(request):
 
    prompt = f"A image of the character {guess}, digital art"
    image_url = generate_image(prompt)
-   
+
    print("Image URL:", image_url)
    iteration = request.session.get('iteration', 0)
 
