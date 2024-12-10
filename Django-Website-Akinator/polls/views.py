@@ -93,9 +93,7 @@ def clear_answers(request):
 
 def guess_page(request):
    #place holder for the guess page to show it, You can add code here
-   context = request.session.get('context', [])
-
-   guess = make_guess(context)
+   guess = request.session['final_guess']
 
    prompt = f"A image of the character {guess}, digital art"
    image_url = generate_image(prompt)
@@ -139,6 +137,8 @@ def question_view_llama(request):
         # Check if confidence is sufficient for a guess
         if confidence == "10" or iteration >= 15:
             request.session['iteration'] = iteration
+            guess = make_guess(context)
+            request.session['final_guess'] = guess
             return redirect('polls:guessPage')
 
         # Continue with the next question
