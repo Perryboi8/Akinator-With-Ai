@@ -28,11 +28,11 @@ def question_view_gpt(request):
             answers.append(button_answer)
 
         iteration += 1
-        log += f"Question {iteration}: {previous_questions[-1] if previous_questions else 'N/A'}, Answer: {answers[-1]}\n"
+        log += f"Question {iteration}: {previous_questions[-1] if previous_questions else 'Is Your Character Real?'}, Answer: {answers[-1]}\n"
         request.session['iteration'] = iteration
         request.session['log'] = log
         request.session['answers'] = answers
-
+        print(log)
         if not genre_identified and iteration >= 4:
             genre_confidence = evaluate_genre_confidence(log)
             if genre_confidence >= 85 or iteration >= 10:
@@ -70,13 +70,11 @@ def question_view_gpt(request):
             'iteration': iteration,
         })
 
-    # initializing
-    request.session['iteration'] = 0
-    request.session['answers'] = []
-    request.session['previous_questions'] = []
-    request.session['genre_confidence'] = 0
-    request.session['genre_identified'] = False
-    request.session['log'] = ""
+    # For GET requests, use existing session data or initializing
+    answers = request.session.get('answers', [])
+    previous_questions = request.session.get('previous_questions', [])
+    iteration = request.session.get('iteration', 0)
+    question = previous_questions[-1] if previous_questions else "Is your character real?"
     return render(request, 'index.html')
 
 
@@ -145,8 +143,16 @@ def question_view_llama(request):
         return render(request, 'index2.html', {'ai_response': question, 'context': context, 'confidence': confidence})
 
     # Handle GET (start of the game)
-    request.session['context'] = []
-    request.session['confidence'] = "0"
-    request.session['iteration'] = 1
-    first_question = "Is your character real?"
+    context = request.session.get('context', [])
+    first_question = context[-1] if context else "Is your character real?"
     return render(request, 'index2.html', {'ai_response': first_question})
+
+def continue_game(request):
+    #Determine which AI is currently in use (based on session data used to pass through i felt genius when I released this lol.)
+    if 'context' in request.session:  #Check if Llama is in use
+        return redirect('polls:question_page_llama')
+    elif 'answers' in request.session:  #Check if OpenAI is in use
+        return redirect('polls:question_page_gpt')
+    else:
+        return redirect('polls:home_page')  #Fallback to home page if no session data
+
