@@ -132,11 +132,12 @@ def question_view_llama(request):
         request.session['iteration'] = iteration + 1
         print(context)
         print(confidence)
+        print(iteration)
 
         # Check if confidence is sufficient for a guess
-        if confidence == "9" or iteration >= 20:
-            request.session['iteration'] = iteration
+        if confidence == "8" or iteration %20 == 0:
             iteration += 1
+            request.session['iteration'] = iteration
             guess = make_guess(context)
             print(confidence)
             request.session['final_guess'] = guess
