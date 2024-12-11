@@ -24,7 +24,6 @@ def generate_next_question(context, model="llama3.2"):
                                     Your task is to ask a yes or no question that helps you narrow down the possibilities. Only ask one question at a time, and the question must be highly relevant based off a history list.
                                     Rules:
 
-                                    1. Begin with broad, general questions to narrow the category (e.g., "Is the character real?" or "Is the character male?").
                                     2. As you gather information, gradually transition to more specific questions that will help you narrow down the character.
                                     3. Avoid overly specific questions (e.g., "Is your character from Star Wars?") unless prior answers strongly suggest that level of detail.
                                     4. Do not repeat or rephrase any previous questions from the history. Ensure your question is unique and distinct.
@@ -59,9 +58,9 @@ def make_guess(context, model="llama3.2"):
                                     Rules:
 
                                     1. Make one confident guess about the character based solely on the information provided in the history.
-                                    2. Your response should only include the name of the character and nothing else. Avoid any additional context, reasoning, or commentary.
+                                    2. Your response should only include the name of the character and nothing else. Avoid any additional context, reasoning, or commentary. Do not put any punctuation.
                                     3. If the history doesn't provide enough information for a confident guess, make your best attempt while accounting for slight ambiguities in the answers.
-                                    What is your guess? Here is the conversation history: """ + history_prompt
+                                    What is your guess? Here is the history of questions and answers: """ + history_prompt
                 },
             ],
         )

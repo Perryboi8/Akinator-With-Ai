@@ -137,9 +137,10 @@ def question_view_llama(request):
         request.session['confidence'] = confidence
         request.session['iteration'] = iteration + 1
         print(context)
+        print(confidence)
 
         # Check if confidence is sufficient for a guess
-        if confidence == "10" or iteration >= 15:
+        if confidence == "9" or iteration >= 20:
             request.session['iteration'] = iteration
             return redirect('polls:guessPage')
 
