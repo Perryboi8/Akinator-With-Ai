@@ -2,7 +2,7 @@ A remake of the popular Akinator web based game using artificial intelligence to
 CURRENTLY WIP
 
 # Django Installation:
-1. Go to the following link and download Django https://docs.djangoproject.com/en/5.1/topics/install/  Django is used as a Web Framework using Python.
+1. Go to the following link and download Django https://docs.djangoproject.com/en/5.1/topics/install/  Django is used as a Web Framework using Python. Alternatively, in terminal use "python pip install django"
 2.  After Installing Django you will also need to install the debug tool bar to install that please run this command "python -m pip install django-debug-toolbar"
 # OpenAI Installation:
 1. Go into your terminal and type the following, "pip install openai" this will install openai which lets you use their chatbots on their platform
