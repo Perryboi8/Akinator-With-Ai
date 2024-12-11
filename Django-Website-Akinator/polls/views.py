@@ -15,6 +15,7 @@ def question_view_gpt(request):
     if request.method == 'POST':
         button_answer = request.POST.get('button-answer')
         textbox_answer = request.POST.get('textbox-answer')
+        
         answers = request.session.get('answers', [])
         previous_questions = request.session.get('previous_questions', [])
         iteration = request.session.get('iteration', 0)
@@ -98,7 +99,6 @@ def guess_page(request):
 
    print("Image URL:", image_url)
    iteration = request.session.get('iteration', 0)
-
    return render(request, 'guess.html', {'final_guess': guess, 'image_url': image_url, 'iteration': iteration})
 
 def question_view_llama(request):
@@ -135,7 +135,9 @@ def question_view_llama(request):
         # Check if confidence is sufficient for a guess
         if confidence == "10" or iteration >= 15:
             request.session['iteration'] = iteration
+            iteration += 1
             guess = make_guess(context)
+            print(confidence)
             request.session['final_guess'] = guess
             return redirect('polls:guessPage')
 
