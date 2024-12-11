@@ -41,7 +41,7 @@ def question_view_gpt(request):
 
         if not genre_identified and iteration >= 5:
             genre_confidence = evaluate_genre_confidence(log)
-            if genre_confidence >= 90 or iteration >= 10:
+            if genre_confidence >= 92 or iteration >= 10:
                 genre_description = identify_genre(log)
                 log += f"\nGenre/Background Information: {genre_description}\n"
                 request.session['log'] = log
