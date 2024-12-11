@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.urls import reverse
-from .gpt4_chara import get_next_question, make_final_guess, evaluate_genre_confidence, identify_genre
+from .gpt4_chara import get_next_question, make_final_guess, evaluate_genre_confidence, identify_genre, evaluate_name_confidence
 import logging
 from .llama_service import generate_next_question, make_guess, evaluate_confidence, generate_image
 
@@ -15,7 +15,7 @@ def question_view_gpt(request):
     if request.method == 'POST':
         button_answer = request.POST.get('button-answer')
         textbox_answer = request.POST.get('textbox-answer')
-        
+
         answers = request.session.get('answers', [])
         previous_questions = request.session.get('previous_questions', [])
         iteration = request.session.get('iteration', 0)
@@ -28,30 +28,35 @@ def question_view_gpt(request):
         elif button_answer:
             answers.append(button_answer)
 
+        if not previous_questions:
+            previous_questions.append("Is your character real?")
+
         iteration += 1
-        log += f"Question {iteration}: {previous_questions[-1] if previous_questions else 'Is Your Character Real?'}, Answer: {answers[-1]}\n"
+        log += f"Question {iteration}: {previous_questions[-1]}, Answer: {answers[-1]}\n"
         request.session['iteration'] = iteration
         request.session['log'] = log
         request.session['answers'] = answers
-        print(log)
-        if not genre_identified and iteration >= 4:
+        
+        print("Log:", log)
+
+        if not genre_identified and iteration >= 5:
             genre_confidence = evaluate_genre_confidence(log)
-            if genre_confidence >= 85 or iteration >= 10:
+            if genre_confidence >= 90 or iteration >= 10:
                 genre_description = identify_genre(log)
-                log += f"\nGenre Identified: {genre_description}\n"
+                log += f"\nGenre/Background Information: {genre_description}\n"
                 request.session['log'] = log
                 request.session['genre_identified'] = True
                 request.session['iteration'] = 0
-                answers = []
-                previous_questions = []
+                answers.clear()
+                previous_questions.clear()
 
-        if genre_identified and iteration >= 4:
-            final_guess = make_final_guess(log)
-            request.session['iteration'] = iteration
-            request.session['final_guess'] = final_guess
-            return redirect('polls:guessPage')
+        if genre_identified and iteration >= 5:
+            confidence = evaluate_name_confidence(log)
+            if confidence >= 92 or iteration >= 10:
+                final_guess = make_final_guess(log)
+                request.session['final_guess'] = final_guess
+                return redirect('polls:guessPage2')
 
-        log = "\n".join(answers)
         question = None
         retry_limit = 10
         for _ in range(retry_limit):
@@ -70,13 +75,15 @@ def question_view_gpt(request):
             'answers': answers,
             'iteration': iteration,
         })
-
-    # For GET requests, use existing session data or initializing
     answers = request.session.get('answers', [])
     previous_questions = request.session.get('previous_questions', [])
     iteration = request.session.get('iteration', 0)
     question = previous_questions[-1] if previous_questions else "Is your character real?"
-    return render(request, 'index.html')
+    return render(request, 'index.html', {
+        'ai_response': question,
+        'answers': answers,
+        'iteration': iteration,
+    })
 
 
 def get_answers(request):
@@ -100,6 +107,19 @@ def guess_page(request):
    print("Image URL:", image_url)
    iteration = request.session.get('iteration', 0)
    return render(request, 'guess.html', {'final_guess': guess, 'image_url': image_url, 'iteration': iteration})
+
+def guess_page2(request):
+   #place holder for the guess page to show it, You can add code here
+   guess = request.session['final_guess']
+
+   prompt = f"A image of the character {guess}, digital art"
+   image_url = generate_image(prompt)
+
+   print("Image URL:", image_url)
+   iteration = request.session.get('iteration', 0)
+   answers = request.session.get('answers', [])
+   return render(request, 'guess2.html', {'final_guess': guess, 'image_url': image_url, 'iteration': iteration, 'answers': answers})
+
 
 def question_view_llama(request):
     if request.method == 'POST':
@@ -155,7 +175,14 @@ def continue_game(request):
     #Determine which AI is currently in use (based on session data used to pass through i felt genius when I released this lol.)
     if 'context' in request.session:  #Check if Llama is in use
         return redirect('polls:question_page_llama')
-    elif 'answers' in request.session:  #Check if OpenAI is in use
+    elif 'answers' in request.session:  # Check if GPT is in use
+        request.session['iteration'] = 0
+        request.session['confidence'] = 0
+        log = request.session.get('log', "")
+        previous_questions = request.session.get('previous_questions', [])
+        request.session['log'] = log
+        request.session['previous_questions'] = previous_questions
+        request.session['answers'] = []
         return redirect('polls:question_page_gpt')
     else:
         return redirect('polls:home_page')  #Fallback to home page if no session data
