@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Guess</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffcc66;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-top: 6;
+            font-size: 6em;
+        }
+        .container {
+            text-align: center;
+            margin-bottom: auto;
+        }
+        .subtext {
+          font-size: 2em;
+          margin-top: 20px;
+        }
+        .button-group {
+            position: absolute;
+            bottom: 100px;
+            display: flex;
+            justify-content: center;
+            gap: 20em;
+        }
+        button {
+            padding: 30px 60px;
+            font-size: 48px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+        button:focus {
+            outline: none;
+        }
+        .btn-yes {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-no {
+            background-color: #dc3545;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Is {{ final_guess }} Your Character?</h1>
+    <img src="{{ image_url }}" alt="Image not generated due to copyright/filtering." style="width: 500px; height: auto; border-radius: 10px;">
+    <!--
+    <p class="subtext">It took {{ answers|length }} questions to achieve this guess.</p>
+    -->
+</div>
+
+<div class="button-group">
+    <button class="btn-yes" onclick="handleYes()">Yes</button>
+    <button class="btn-no" onclick="handleNo()">No</button>
+</div>
+
+</body>
+
+<script>
+    function handleNo() {
+        window.location.href = "{% url 'polls:continue_game' %}";
+    }
+
+    function handleYes() {
+        // Implement any functionality if needed for the "Yes" button
+        window.location.href = "{% url 'polls:clear_page' %}";
+    }
+</script>
+
+</html>
