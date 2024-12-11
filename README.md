@@ -5,3 +5,4 @@ CURRENTLY WIP
 1. Go to the following link and download Ollama for the respective OS [https://ollama.com/download/windows]
 2. After installing Ollama, make sure Ollama is running (Check in taskbar).
 3. Go to terminal and run "ollama pull llama3.2"
+4. Once done, Ollama and the Llama3.2 model will be successfully installed!
