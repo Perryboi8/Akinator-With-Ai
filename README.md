@@ -2,9 +2,10 @@ A remake of the popular Akinator web based game using artificial intelligence to
 CURRENTLY WIP
 
 # Django Installation:
-
+1. Go to the following link and download Django https://docs.djangoproject.com/en/5.1/topics/install/  Django is used as a Web Framework using Python.
+2.  After Installing Django you will also need to install the debug tool bar to install that please run this command "python -m pip install django-debug-toolbar"
 # OpenAI Installation:
-1. 
+1. Go into your terminal and type the following, "pip install openai" this will install openai which lets you use their chatbots on their platform
 # Ollama/Llama3.2 Installation:
 1. Go to the following link and download Ollama for the respective OS [https://ollama.com/download/windows]. Ollama is an open source tool used to run Large Language Models (allows us to run Llama 3.2)
 2. After installing Ollama, make sure Ollama is running (Check in taskbar).
