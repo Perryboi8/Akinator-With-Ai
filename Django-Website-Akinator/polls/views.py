@@ -155,7 +155,7 @@ def question_view_llama(request):
         print(iteration)
 
         # Check if confidence is sufficient for a guess
-        if confidence == "8" or iteration %20 == 0:
+        if confidence == "9" or iteration %20 == 0:
             iteration += 1
             request.session['iteration'] = iteration
             guess = make_guess(context)
