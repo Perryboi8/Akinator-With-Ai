@@ -12,5 +12,7 @@ urlpatterns = [
     path('get-answers', views.get_answers, name='get_page'),
     path('clear/', views.clear_answers, name='clear_page'),
     path('guess', views.guess_page, name='guessPage'),
-    path('question-llama', views.question_view_llama, name = 'question_page_llama')
+    path('question-llama', views.question_view_llama, name = 'question_page_llama'),
+    path('continue-game/', views.continue_game, name='continue_game')
 ]
+
