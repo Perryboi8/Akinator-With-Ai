@@ -2,10 +2,17 @@ import ollama
 import logging
 import openai
 import os
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+load_dotenv()
+
+KEY1 = os.getenv("OPENAI_KEY1")
+KEY2 = os.getenv("OPENAI_KEY2")
+KEY = str(KEY1) + str(KEY2)
+
+openai.api_key = KEY
 
 def generate_next_question(context, model="llama3.2"):
     """
