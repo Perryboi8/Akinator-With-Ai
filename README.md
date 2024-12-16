@@ -1,6 +1,12 @@
 A remake of the popular Akinator web based game using artificial intelligence to respond and further pinpoint the character that the user is thinking. 
 CURRENTLY WIP
 
+# REQUIREMENTS
+1. Python
+2. Python Django
+3. Python OpenAi
+4. Ollama and Llama 3.2 Model
+   
 # Django Installation:
 1. Go to the following link and download Django https://docs.djangoproject.com/en/5.1/topics/install/  Django is used as a Web Framework using Python. Alternatively, in terminal use "python -m pip install django"
 2.  After Installing Django you will also need to install the debug tool bar to install that please run this command "python -m pip install django-debug-toolbar"
@@ -15,7 +21,8 @@ CURRENTLY WIP
 # How to Run:
 1. Navigate to the Django-Website-Akinator directory in terminal.
 2. Run "python runserver manage.py"
-3. Visit the website with the given link (default https://127.0.0.1:8000)
+3. Make sure Ollama is running via opening the application.
+4. Visit the website with the given link (default https://127.0.0.1:8000)
 
 # How to Play
 1. Press the play button.
